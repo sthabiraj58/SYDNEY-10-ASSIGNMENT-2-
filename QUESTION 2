@@ -28,8 +28,7 @@ seasons = {
     "Summer": ["December", "January", "February"],
     "Autumn": ["March", "April", "May"],
     "Winter": ["June", "July", "August"],
-    "Spring": ["September", "October", "November"]
-}
+    "Spring": ["September", "October", "November"]}
 
 seasonal_averages = {}
 
@@ -68,8 +67,7 @@ with open("temperature_stability_stations.txt", "w") as f:
     for _, row in most_stable.iterrows():
         f.write(
             f"Most Stable: Station {row['STATION_NAME']}: "
-            f"StdDev {row['TempStdDev']:.1f}°C\n"
-        )
+            f"StdDev {row['TempStdDev']:.1f}°C\n" )
 
     for _, row in most_variable.iterrows():
         f.write(
