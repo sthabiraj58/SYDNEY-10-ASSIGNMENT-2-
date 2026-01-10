@@ -5,15 +5,6 @@ import pandas as pd
 folder_path = "temperatures"
 csv_files = os.listdir(folder_path)
 
-first_file = csv_files[0]
-file_path = os.path.join(folder_path, first_file)
-
-df = pd.read_csv(file_path)
-
-print("First file:", first_file)
-print(df.head())
-print("Rows, Columns:", df.shape)
-
 all_data = []
 
 for file in csv_files:
