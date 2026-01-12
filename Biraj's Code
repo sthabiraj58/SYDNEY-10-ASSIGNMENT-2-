@@ -1,0 +1,85 @@
+def encrypt_char(ch, shift1, shift2):
+    if ch.islower():
+        if 'a' <= ch <= 'm':
+            return chr((ord(ch) - ord('a') + shift1 * shift2) % 26 + ord('a'))
+        elif 'n' <= ch <= 'z':
+            return chr((ord(ch) - ord('a') - (shift1 + shift2)) % 26 + ord('a'))
+
+    elif ch.isupper():
+        if 'A' <= ch <= 'M':
+            return chr((ord(ch) - ord('A') - shift1) % 26 + ord('A'))
+        elif 'N' <= ch <= 'Z':
+            return chr((ord(ch) - ord('A') + shift2 ** 2) % 26 + ord('A'))
+
+    return ch
+
+
+def decrypt_char(ch, shift1, shift2):
+    if ch.islower():
+     
+        forward = chr((ord(ch) - ord('a') - shift1 * shift2) % 26 + ord('a'))
+        backward = chr((ord(ch) - ord('a') + (shift1 + shift2)) % 26 + ord('a'))
+
+       
+        if 'a' <= forward <= 'm':
+            return forward
+        else:
+            return backward
+
+    elif ch.isupper():
+        backward = chr((ord(ch) - ord('A') + shift1) % 26 + ord('A'))
+        forward = chr((ord(ch) - ord('A') - shift2 ** 2) % 26 + ord('A'))
+
+        if 'A' <= backward <= 'M':
+            return backward
+        else:
+            return forward
+
+    return ch
+
+
+def encrypt_file(shift1, shift2):
+    with open("C:\\Users\\Biraj\\OneDrive\\Documents\\GITHUB\\ASSIGNMENT\\raw_text.txt", "r") as f:
+        text = f.read()
+
+    encrypted = "".join(encrypt_char(c, shift1, shift2) for c in text)
+
+    with open("encrypted_text.txt", "w") as f:
+        f.write(encrypted)
+
+    print("Encryption completed. Encrypted file created.")
+
+
+def decrypt_file(shift1, shift2):
+    with open("encrypted_text.txt", "r") as f:
+        text = f.read()
+    
+
+    decrypted = "".join(decrypt_char(c, shift1, shift2) for c in text)
+
+    with open("decrypted_text.txt", "w") as f:
+        f.write(decrypted)
+
+    print("Decryption completed. Decrypted file created.")
+
+
+def verify_decryption():
+    with open("C:\\Users\\Biraj\\OneDrive\\Documents\\GITHUB\\ASSIGNMENT\\raw_text.txt", "r") as f:
+        original = f.read()
+
+    with open("decrypted_text.txt", "r") as f:
+        decrypted = f.read()
+
+    if original == decrypted:
+        print("Verification successful: Decrypted text matches the original.")
+    else:
+        print("Verification failed: Decrypted text does NOT match the original.")
+
+
+
+shift1 = int(input("Enter shift1 value: "))
+shift2 = int(input("Enter shift2 value: "))
+
+encrypt_file(shift1, shift2)
+decrypt_file(shift1, shift2)
+verify_decryption()
