@@ -1,0 +1,67 @@
+# SYDNEY-10-ASSIGNMENT-2 Question 2
+import os
+import pandas as pd
+
+folder_path = "temperatures"
+csv_files = os.listdir(folder_path)
+
+all_data = []
+
+for file in csv_files:
+    file_path = os.path.join(folder_path, file)
+    df = pd.read_csv(file_path)
+    all_data.append(df)
+
+combined_df = pd.concat(all_data, ignore_index=True)
+print("Total rows, columns:", combined_df.shape)
+print(combined_df.head())
+seasons = {
+    "Summer": ["December", "January", "February"],
+    "Autumn": ["March", "April", "May"],
+    "Winter": ["June", "July", "August"],
+    "Spring": ["September", "October", "November"]}
+
+seasonal_averages = {}
+
+for season, months in seasons.items():
+    seasonal_averages[season] = combined_df[months].mean().mean()
+
+for season, avg in seasonal_averages.items():
+    print(f"{season}: {avg:.2f}°C\n")
+    month_columns = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"]
+
+combined_df["MaxTemp"] = combined_df[month_columns].max(axis=1)
+combined_df["MinTemp"] = combined_df[month_columns].min(axis=1)
+combined_df["TempRange"] = combined_df["MaxTemp"] - combined_df["MinTemp"]
+
+max_range = combined_df["TempRange"].max()
+largest_range_stations = combined_df[combined_df["TempRange"] == max_range]
+
+with open("largest_temp_range_station.txt", "w") as f:
+    for _, row in largest_range_stations.iterrows():
+        f.write(
+            f"Station {row['STATION_NAME']}: "
+            f"Range {row['TempRange']:.1f}°C "
+            f"(Max: {row['MaxTemp']:.1f}°C, Min: {row['MinTemp']:.1f}°C)\n")
+
+combined_df["TempStdDev"] = combined_df[month_columns].std(axis=1)
+
+min_std = combined_df["TempStdDev"].min()
+max_std = combined_df["TempStdDev"].max()
+
+most_stable = combined_df[combined_df["TempStdDev"] == min_std]
+most_variable = combined_df[combined_df["TempStdDev"] == max_std]
+
+with open("temperature_stability_stations.txt", "w") as f:
+    for _, row in most_stable.iterrows():
+        f.write(
+            f"Most Stable: Station {row['STATION_NAME']}: "
+            f"StdDev {row['TempStdDev']:.1f}°C\n" )
+
+    for _, row in most_variable.iterrows():
+        f.write(
+            f"Most Variable: Station {row['STATION_NAME']}: "
+            f"StdDev {row['TempStdDev']:.1f}°C\n"
+        )
