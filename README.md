@@ -1,2 +1,2 @@
 The program reads and combines all CSV files from the temperatures folder into a single dataset. It then performs several calculations to summarise and compare temperature patterns across all stations and years. These include calculating average seasonal temperatures using Australian seasons, identifying the station or stations with the largest temperature range, and determining which stations have the most stable and most variable temperatures based on standard deviation.
-All calculations automatically ignore missing temperature values to ensure the results are accurate. The final results are saved to text files for easy review and reporting.
+All calculations automatically ignore missing temperature values to ensure the results are accurate. 
